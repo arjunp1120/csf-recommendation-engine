@@ -13,3 +13,5 @@ build/
 .env
 docs/
 development-notes/
+sql/
+terraform/
