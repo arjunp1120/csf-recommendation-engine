@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "csf-recommendation-engine"
+version = "0.1.0"
+description = "CSF block trade recommendation engine"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.115.12",
+    "uvicorn[standard]==0.34.2",
+    "pydantic-settings==2.9.1",
+    "python-dotenv==1.1.0",
+    "asyncpg==0.30.0",
+    "httpx==0.28.1",
+    "numpy==2.2.5",
+    "scipy==1.15.2",
+    "pandas==2.2.3",
+    "pyarrow==19.0.1",
+    "apscheduler==3.11.2",
+    "lightfm @ git+https://github.com/lyst/lightfm.git@0c9c31e"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.5",
+    "pytest-asyncio==0.26.0",
+    "rapidfuzz>=3.14.5",
+    "ruff==0.11.8",
+]
+build = [
+    "Cython==3.2.4"
+]
+
+[project.scripts]
+csf-run-api = "csf_recommendation_engine.cli:run_api"
+csf-run-nightly = "csf_recommendation_engine.cli:run_nightly"
+csf-run-rec-refresh = "csf_recommendation_engine.cli:run_rec_refresh"
+csf-run-weekend = "csf_recommendation_engine.cli:run_weekend"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

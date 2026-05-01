@@ -1,0 +1,1 @@
+"""Standalone job entrypoints."""
