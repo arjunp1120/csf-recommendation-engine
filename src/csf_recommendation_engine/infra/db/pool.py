@@ -43,7 +43,7 @@ async def get_db_connection() -> AsyncGenerator[asyncpg.Connection, None]:
 async def get_optional_db_connection() -> AsyncGenerator[asyncpg.Connection | None, None]:
     """Yields a DB connection if configured; otherwise yields None.
 
-    This allows the API to start (and serve /health) even when POSTGRES_DSN is not set.
+    This allows the API to start (and serve /health) even when DATABASE_URL is not set.
     """
 
     if db_pool is None:

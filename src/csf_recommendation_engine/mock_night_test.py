@@ -42,7 +42,7 @@ async def mock_acquire_advisory_lock(conn):
 
 async def main():
     settings = get_settings()
-    await init_db_pool(str(settings.postgres_dsn))
+    await init_db_pool(str(settings.database_url))
     
     # Needs explicit artifact paths to load properly outside of FastAPI lifespan
     await preload_champion_state(

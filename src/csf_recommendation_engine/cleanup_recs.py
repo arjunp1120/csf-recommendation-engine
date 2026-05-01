@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 async def main():
     settings = get_settings()
     logging.info("Initializing database connection pool for cleanup...")
-    await init_db_pool(str(settings.postgres_dsn))
+    await init_db_pool(str(settings.database_url))
     
     pool = get_db_pool()
     async with pool.acquire() as conn:

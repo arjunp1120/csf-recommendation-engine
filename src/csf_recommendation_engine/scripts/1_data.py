@@ -15,7 +15,7 @@ from scipy.sparse import coo_matrix, csr_matrix
 from csf_recommendation_engine.core.config import get_settings
 
 settings = get_settings()
-POSTGRES_DSN = settings.postgres_dsn
+DATABASE_URL = settings.database_url
 
 DIR_PATH = Path(__file__).parent
 # EXECUTED_STATUS_EXCLUSIONS = {
@@ -85,7 +85,7 @@ async def load_trade_history() -> pd.DataFrame:
         FROM trade_history
     """
 
-    connection = await asyncpg.connect(dsn=POSTGRES_DSN, ssl=build_ssl_context())
+    connection = await asyncpg.connect(dsn=DATABASE_URL, ssl=build_ssl_context())
     try:
         records = await connection.fetch(query)
     finally:

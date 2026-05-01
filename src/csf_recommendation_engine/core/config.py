@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     app_debug: bool = Field(default=False, alias="APP_DEBUG")
     app_timezone: str = Field(default="America/New_York", alias="APP_TIMEZONE")
 
-    postgres_dsn: str = Field(default="", alias="POSTGRES_DSN")
+    database_url: str = Field(default="", alias="DATABASE_URL")
     # postgres_readonly_dsn: str = Field(default="", alias="POSTGRES_READONLY_DSN")
 
     # azure_storage_connection_string: str = Field(default="", alias="AZURE_STORAGE_CONNECTION_STRING")

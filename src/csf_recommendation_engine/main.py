@@ -33,10 +33,10 @@ async def lifespan(app: FastAPI):
     # app.state.shadow_model = None
     app.state.shadow_model = None
 
-    if settings.postgres_dsn:
-        await init_db_pool(settings.postgres_dsn)
+    if settings.database_url:
+        await init_db_pool(settings.database_url)
     else:
-        logger.warning("POSTGRES_DSN is empty; DB pool will not be initialized")
+        logger.warning("DATABASE_URL is empty; DB pool will not be initialized")
 
     try:
         await preload_champion_state(
