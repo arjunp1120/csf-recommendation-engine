@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     app_timezone: str = Field(default="America/New_York", alias="APP_TIMEZONE")
 
     postgres_dsn: str = Field(default="", alias="POSTGRES_DSN")
-    postgres_readonly_dsn: str = Field(default="", alias="POSTGRES_READONLY_DSN")
+    # postgres_readonly_dsn: str = Field(default="", alias="POSTGRES_READONLY_DSN")
 
     # azure_storage_connection_string: str = Field(default="", alias="AZURE_STORAGE_CONNECTION_STRING")
     # azure_storage_container: str = Field(default="csf-recommender-data", alias="AZURE_STORAGE_CONTAINER")

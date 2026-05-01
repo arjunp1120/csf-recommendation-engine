@@ -26,8 +26,8 @@ async def fetch_raw_feature_frame(_readonly_dsn: str) -> pd.DataFrame:
 
 async def run_nightly_extraction() -> None:
     settings = get_settings()
-    if not settings.postgres_readonly_dsn:
-        raise RuntimeError("POSTGRES_READONLY_DSN is required for nightly extraction")
+    # if not settings.postgres_readonly_dsn:
+    #     raise RuntimeError("POSTGRES_READONLY_DSN is required for nightly extraction")
     # if not settings.azure_storage_connection_string:
     #     raise RuntimeError("AZURE_STORAGE_CONNECTION_STRING is required for nightly extraction")
 
