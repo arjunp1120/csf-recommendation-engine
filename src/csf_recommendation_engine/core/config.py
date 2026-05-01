@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    app_env: str = Field(default="local", alias="APP_ENV")
+    app_env: str = Field(default="prod", alias="APP_ENV")
     app_name: str = Field(default="csf-recommendation-engine", alias="APP_NAME")
     app_debug: bool = Field(default=False, alias="APP_DEBUG")
     app_timezone: str = Field(default="America/New_York", alias="APP_TIMEZONE")
