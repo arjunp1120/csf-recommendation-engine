@@ -12,3 +12,4 @@ build/
 *.log
 .env
 docs/
+development-notes/
