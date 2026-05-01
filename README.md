@@ -1,6 +1,6 @@
 ﻿# csf-recommendation-engine
 
-Python microservice scaffold for the CSF block trade recommendation system.
+Python microservice for the CSF block trade recommendation system.
 
 ## Local setup
 
