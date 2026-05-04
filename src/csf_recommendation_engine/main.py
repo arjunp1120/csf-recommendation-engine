@@ -4,6 +4,8 @@ from zoneinfo import ZoneInfo
 from fastapi import FastAPI
 import uvicorn
 from pathlib import Path
+import logging
+from datetime import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
@@ -12,26 +14,31 @@ from csf_recommendation_engine.api.middleware.request_id import RequestIdMiddlew
 from csf_recommendation_engine.api.routes import admin, health, internal, recommend
 from csf_recommendation_engine.core.config import get_settings
 from csf_recommendation_engine.core.logging import configure_logging
-import logging
 
-from csf_recommendation_engine.core.startup import preload_champion_state, preload_heuristics_state
-from csf_recommendation_engine.core.startup import preload_client_entity_catalog
+
+from csf_recommendation_engine.core.startup import (
+    preload_champion_state,
+    preload_heuristics_state,
+    preload_client_entity_catalog,
+)
 from csf_recommendation_engine.infra.db.pool import init_db_pool, close_db_pool
 from csf_recommendation_engine.jobs.nightly_pipeline import run_full_nightly_pipeline
 from csf_recommendation_engine.jobs.rec_refresh_pipeline import run_rec_refresh_pipeline
 
 logger = logging.getLogger(__name__)
 
+settings = get_settings()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    settings = get_settings()
+    # Startup tasks
     configure_logging(debug=settings.app_debug)
 
     app.state.settings = settings
     # app.state.cached_item_features = None
     # app.state.champion_model = None
     # app.state.shadow_model = None
-    app.state.shadow_model = None
+    # app.state.shadow_model = None
 
     if settings.database_url:
         await init_db_pool(settings.database_url)
@@ -86,7 +93,7 @@ async def lifespan(app: FastAPI):
             coalesce=True,
         )
     if settings.rec_refresh_enabled:
-        from datetime import datetime
+        
         scheduler.add_job(
             run_rec_refresh_pipeline,
             IntervalTrigger(minutes=15),
@@ -110,7 +117,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
-    # TODO: add graceful resource cleanup (DB pool, model handles) during shutdown.
+    # Shutdown tasks
     scheduler = getattr(app.state, "scheduler", None)
     if scheduler is not None:
         scheduler.shutdown(wait=False)
@@ -120,7 +127,7 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(
         title="CSF Recommendation Engine",
-        version="0.1.0",
+        version=settings.app_version,
         lifespan=lifespan,
     )
     app.add_middleware(RequestIdMiddleware)

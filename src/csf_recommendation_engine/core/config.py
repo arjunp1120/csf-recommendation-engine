@@ -9,6 +9,7 @@ class Settings(BaseSettings):
 
     app_env: str = Field(default="prod", alias="APP_ENV")
     app_name: str = Field(default="csf-recommendation-engine", alias="APP_NAME")
+    app_version: str = Field(default="0.1.0", alias="APP_VERSION")
     app_debug: bool = Field(default=False, alias="APP_DEBUG")
     app_timezone: str = Field(default="America/New_York", alias="APP_TIMEZONE")
 

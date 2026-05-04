@@ -1,3 +1,8 @@
+"""
+Init this class on app startup to track metrics and timings.
+Used for monitoring and debugging.
+"""
+
 from dataclasses import dataclass, field
 from typing import Any
 

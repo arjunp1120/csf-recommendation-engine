@@ -15,3 +15,5 @@ docs/
 development-notes/
 sql/
 terraform/
+.vscode/
+.idea/

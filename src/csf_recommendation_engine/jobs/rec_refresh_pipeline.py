@@ -9,10 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from csf_recommendation_engine.core.config import get_settings
-from csf_recommendation_engine.core.startup import (
-    get_model_data,
-    preload_heuristics_state,
-)
+from csf_recommendation_engine.core.startup import preload_heuristics_state
+from csf_recommendation_engine.core.state import app_state
 from csf_recommendation_engine.domain.recommendation_engine import generate_ranked_candidates
 from csf_recommendation_engine.infra.db.pool import get_db_pool
 from csf_recommendation_engine.infra.db.trades import (
@@ -155,7 +153,7 @@ async def run_rec_refresh_pipeline() -> None:
 
                 # Load shared model data
                 try:
-                    model_data = await get_model_data()
+                    model_data = await app_state.get_model_data()
                 except ValueError:
                     logger.error("Champion model is not loaded; cannot run recommendation pass")
                     _emit_summary(counters)

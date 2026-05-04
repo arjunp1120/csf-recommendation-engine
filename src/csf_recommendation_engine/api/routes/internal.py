@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Request
 
@@ -19,9 +19,10 @@ async def serialize_shadow_model(request: Request) -> dict:
 		)
 
 	# TODO: implement blob serialization once the trigger path and artifact policy are approved.
+	# TODO: TIMEZONE CURRENTLY UTC! 
 	return {
 		"status": "accepted",
-		"timestamp": datetime.utcnow().isoformat(),
+		"timestamp": datetime.now(timezone.utc).isoformat(),
 		"request_id": request_id,
 		"shadow_model_present": True,
 		"detail": "Serialization endpoint scaffolded; blob write implementation pending.",

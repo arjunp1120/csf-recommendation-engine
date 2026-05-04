@@ -5,13 +5,6 @@ import logging
 import pandas as pd
 
 from csf_recommendation_engine.core.config import get_settings
-from csf_recommendation_engine.domain.extraction import (
-    apply_feature_transformations,
-    build_feature_blob_paths,
-    to_parquet_bytes,
-    validate_feature_frame,
-)
-from csf_recommendation_engine.infra.storage.blob_client import BlobStore
 
 logger = logging.getLogger(__name__)
 

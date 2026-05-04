@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from math import exp, log
+from typing import Optional
 
 import numpy as np
 
@@ -37,7 +38,7 @@ def _recency_score(*, last_trade_date, now_date, halflife_days: float) -> float:
     return float(exp(-log(2) * days_ago / halflife_days))
 
 
-def _size_fit_score(*, quantity: float, mean_size: float, stddev_size: float) -> float:
+def _size_fit_score(*, quantity: float, mean_size: Optional[float], stddev_size: Optional[float]) -> float:
     if mean_size is None or quantity is None:
         return 0.0
     if stddev_size is None:
