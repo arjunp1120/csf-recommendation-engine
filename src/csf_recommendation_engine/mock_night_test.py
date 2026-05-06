@@ -3,9 +3,12 @@ import json
 import logging
 from unittest.mock import patch
 from pprint import pprint
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 from csf_recommendation_engine.core.config import get_settings
-from csf_recommendation_engine.core.startup import preload_champion_state, preload_client_entity_catalog
+from csf_recommendation_engine.core.startup import preload_champion_state, preload_client_entity_catalog, preload_intelligence_service
 from csf_recommendation_engine.infra.db.pool import init_db_pool, close_db_pool
 from csf_recommendation_engine.jobs.rec_refresh_pipeline import run_rec_refresh_pipeline
 
@@ -46,10 +49,12 @@ async def main():
     
     # Needs explicit artifact paths to load properly outside of FastAPI lifespan
     await preload_champion_state(
-        model_path=str(settings.champion_model_path), 
-        artifact_path=str(settings.model_artifacts_path)
+        model_path=Path(settings.champion_model_path), 
+        artifact_path=Path(settings.model_artifacts_path)
     )
     await preload_client_entity_catalog()
+
+    await preload_intelligence_service()
     
     with patch("csf_recommendation_engine.jobs.rec_refresh_pipeline.insert_ai_recommendations", new=mock_insert_ai_recommendations), \
          patch("csf_recommendation_engine.jobs.rec_refresh_pipeline.insert_cross_block_matches", new=mock_insert_cross_block_matches), \

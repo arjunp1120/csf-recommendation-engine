@@ -6,7 +6,9 @@ import logging
 import math
 from contextlib import suppress
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from csf_recommendation_engine.core.config import get_settings
 from csf_recommendation_engine.core.startup import preload_heuristics_state
@@ -162,6 +164,10 @@ async def run_rec_refresh_pipeline() -> None:
                 # Entity name map for resolving candidates
                 entity_name_map: dict[str, str] = model_data.get("client_entity_names", {})
 
+                # Intelligence service (may be None if LLM is disabled)
+                intelligence_service = await app_state.get("intelligence_service")
+                heuristics = model_data.get("heuristics")
+
                 # -------------------------------------------------------
                 # Step 3: Fetch existing records for deduplication
                 # -------------------------------------------------------
@@ -245,42 +251,116 @@ async def run_rec_refresh_pipeline() -> None:
 
                     trade_recommendations[trade_id] = valid_candidates
 
+                    # --- LLM Intelligence Layer ---
+                    logger.debug("==============Processing LLM Intelligence Layer============")
+                    llm_recommendations = None
+                    if intelligence_service is not None and valid_candidates:
+                        try:
+                            now_local = datetime.now(ZoneInfo(settings.app_timezone))
+                            trade_context = {
+                                "desk": str(trade.get("desk_type") or ""),
+                                "structure": str(trade.get("structure") or ""),
+                                "side": str(trade["side"]),
+                                "quantity": float(trade["quantity"]),
+                                "instrument": str(trade.get("instrument_name") or ""),
+                                "venue": str(trade.get("venue") or ""),
+                                "current_trade_hour": now_local.hour,
+                            }
+                            llm_recommendations = await asyncio.to_thread(
+                                intelligence_service.evaluate_candidates,
+                                trade_context=trade_context,
+                                candidates=valid_candidates[:settings.llm_candidate_pool_size],
+                                heuristics=heuristics,
+                                instrument_name=str(trade.get("instrument_name") or ""),
+                                current_hour=now_local.hour,
+                            )
+                        except Exception:
+                            logger.exception(
+                                "LLM evaluation failed for trade; falling back to algorithmic ranking",
+                                extra={"trade_id": trade_id},
+                            )
+
+                    # Update final_scores with LLM confidence if available
+                    if llm_recommendations:
+                        llm_score_map = {
+                            r["entity_id"]: r.get("confidence", 0.0)
+                            for r in llm_recommendations
+                        }
+                        for cand in valid_candidates:
+                            if cand["client_id"] in llm_score_map:
+                                cand["final_score"] = llm_score_map[cand["client_id"]]
+
                     # Build insert rows for ai_recommendations
                     rec_rows: list[dict] = []
-                    for rank, cand in enumerate(valid_candidates[:1], start=1):
-                        if counters.recommendations_skipped_duplicate > 3:
-                            break
-                        # TODO: USER REQUEST - COME BACK TO THIS LATER
-                        description = f"{cand.get('entity_name', 'Unknown')} is a potential counterparty for {trade.get('side')} {trade.get('instrument_name')}"
-                        rec_key = (entity_id, str(trade.get("instrument_name") or ""), description)
+                    if llm_recommendations:
+                        # LLM-curated path
+                        for llm_rec in llm_recommendations[:1]:
+                            if counters.recommendations_skipped_duplicate > 3:
+                                break
+                            llm_entity_id = llm_rec.get("entity_id", "")
+                            llm_entity_name = entity_name_map.get(llm_entity_id, "Unknown Entity")
+                            if llm_entity_name == "Unknown Entity":
+                                counters.recommendations_skipped_unknown += 1
+                                continue
+                            description = llm_rec.get(
+                                "ui_friendly_reasoning",
+                                f"{llm_entity_name} is a potential counterparty for {trade.get('side')} {trade.get('instrument_name')}",
+                            )
+                            rec_key = (entity_id, str(trade.get("instrument_name") or ""), description)
+                            if rec_key in existing_rec_keys:
+                                counters.recommendations_skipped_duplicate += 1
+                                continue
+                            rec_rows.append({
+                                "entity_id": entity_id,
+                                "recommendation_type": "Cross-Block Recommendation",
+                                "product": str(trade.get("instrument_name") or ""),
+                                "description": description,
+                                "details": json.dumps({
+                                    "Desk": str(trade.get("desk_type") or ""),
+                                    "Structure": str(trade.get("structure") or ""),
+                                    "Quantity": float(trade["quantity"]),
+                                    "Counterparty": llm_entity_name,
+                                    "LLM Confidence": llm_rec.get("confidence", 0.0),
+                                    "LLM Reasoning": llm_rec.get("reasoning", ""),
+                                }),
+                                "created_by_ai_agent": "Caddie AI Match Engine",
+                            })
+                    else:
+                        # Fallback: original algorithmic path
+                        for rank, cand in enumerate(valid_candidates[:1], start=1):
+                            if counters.recommendations_skipped_duplicate > 3:
+                                break
+                            # TODO: USER REQUEST - COME BACK TO THIS LATER
+                            description = f"{cand.get('entity_name', 'Unknown')} is a potential counterparty for {trade.get('side')} {trade.get('instrument_name')}"
+                            rec_key = (entity_id, str(trade.get("instrument_name") or ""), description)
 
-                        if rec_key in existing_rec_keys:
-                            counters.recommendations_skipped_duplicate += 1
-                            continue
+                            if rec_key in existing_rec_keys:
+                                counters.recommendations_skipped_duplicate += 1
+                                continue
 
-                        rec_rows.append({
-                            "entity_id": entity_id,
-                            "recommendation_type": "Cross-Block Recommendation",
-                            "product": str(trade.get("instrument_name") or ""),
-                            "description": description,
-                            "details": json.dumps({
-                                # "source_trade_id": trade_id,
-                                "Desk": str(trade.get("desk_type") or ""),
-                                "Structure": str(trade.get("structure") or ""),
-                                # "source_side": str(trade["side"]),
-                                # "source_venue": str(trade.get("venue") or ""),
-                                "Quantity": float(trade["quantity"]),
-                                # "candidate_entity_id": str(cand["client_id"]),
-                                "Counterparty": cand.get("entity_name", ""),
-                                # "lightfm_score": cand.get("lightfm_normalized", 0.0),
-                                # "size_score": cand.get("size_score", 0.0),
-                                # "recency_score": cand.get("recency_score", 0.0),
-                                # "time_score": cand.get("time_score", 0.0),
-                                # "final_score": cand.get("final_score", 0.0),
-                                # "rank": rank,
-                            }),
-                            "created_by_ai_agent": "Caddie AI Match Engine",
-                        })
+                            rec_rows.append({
+                                "entity_id": entity_id,
+                                "recommendation_type": "Cross-Block Recommendation",
+                                "product": str(trade.get("instrument_name") or ""),
+                                "description": description,
+                                "details": json.dumps({
+                                    # "source_trade_id": trade_id,
+                                    "Desk": str(trade.get("desk_type") or ""),
+                                    "Structure": str(trade.get("structure") or ""),
+                                    # "source_side": str(trade["side"]),
+                                    # "source_venue": str(trade.get("venue") or ""),
+                                    "Quantity": float(trade["quantity"]),
+                                    # "candidate_entity_id": str(cand["client_id"]),
+                                    "Counterparty": cand.get("entity_name", ""),
+                                    # "lightfm_score": cand.get("lightfm_normalized", 0.0),
+                                    # "size_score": cand.get("size_score", 0.0),
+                                    # "recency_score": cand.get("recency_score", 0.0),
+                                    # "time_score": cand.get("time_score", 0.0),
+                                    # "final_score": cand.get("final_score", 0.0),
+                                    # "rank": rank,
+                                }),
+                                "created_by_ai_agent": "Caddie AI Match Engine",
+                            })
 
                     if rec_rows and trades_saved_airec < 3:
                         try:

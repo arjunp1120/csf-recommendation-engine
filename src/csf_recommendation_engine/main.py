@@ -20,6 +20,7 @@ from csf_recommendation_engine.core.startup import (
     preload_champion_state,
     preload_heuristics_state,
     preload_client_entity_catalog,
+    preload_intelligence_service,
 )
 from csf_recommendation_engine.infra.db.pool import init_db_pool, close_db_pool
 from csf_recommendation_engine.jobs.nightly_pipeline import run_full_nightly_pipeline
@@ -80,6 +81,11 @@ async def lifespan(app: FastAPI):
         await preload_client_entity_catalog()
     except Exception:
         logger.exception("Failed to preload client entity catalog; candidate filtering may be incomplete")
+
+    try:
+        await preload_intelligence_service()
+    except Exception:
+        logger.exception("Failed to preload intelligence service; LLM layer will be disabled")
 
     scheduler = AsyncIOScheduler(timezone=ZoneInfo(settings.nightly_schedule_timezone))
     app.state.scheduler = scheduler

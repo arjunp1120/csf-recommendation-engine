@@ -64,6 +64,17 @@ class Settings(BaseSettings):
     cross_match_threshold: float = Field(default=0.6, alias="CROSS_MATCH_THRESHOLD")
     rec_refresh_enabled: bool = Field(default=True, alias="REC_REFRESH_ENABLED")
 
+    # LLM / DAF SDK settings
+    daf_base_url: str = Field(default="https://daf-sdk-backend.azurewebsites.net", alias="DAF_BASE_URL")
+    daf_api_key: str = Field(default="", alias="DAF_API_KEY")
+    llm_api_key: str = Field(default="", alias="LLM_API_KEY")
+    llm_model_name: str = Field(default="gpt-4o", alias="LLM_MODEL_NAME")
+    llm_model_provider: str = Field(default="OpenAI", alias="LLM_MODEL_PROVIDER")
+    llm_temperature: str = Field(default="0.4", alias="LLM_TEMPERATURE")
+    llm_max_tokens: int = Field(default=4096, alias="LLM_MAX_TOKENS")
+    llm_enabled: bool = Field(default=True, alias="LLM_ENABLED")
+    llm_candidate_pool_size: int = Field(default=10, alias="LLM_CANDIDATE_POOL_SIZE")
+
     # top_k: int = Field(default=5, alias="TOP_K")
     # max_candidates: int = Field(default=5000, alias="MAX_CANDIDATES")
     # recommend_timeout_seconds: float = Field(default=1.5, alias="RECOMMEND_TIMEOUT_SECONDS")

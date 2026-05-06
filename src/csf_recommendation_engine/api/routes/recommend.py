@@ -30,7 +30,8 @@ async def recommend(
 
         settings = request.app.state.settings
         try:
-            proxy_str, top = generate_ranked_candidates(
+            proxy_str, top = await asyncio.to_thread(
+                generate_ranked_candidates,
                 req=payload,
                 model_data=model_data,
                 settings=settings,
