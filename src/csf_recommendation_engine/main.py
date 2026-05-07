@@ -24,7 +24,7 @@ from csf_recommendation_engine.core.startup import (
 )
 from csf_recommendation_engine.infra.db.pool import init_db_pool, close_db_pool
 from csf_recommendation_engine.jobs.nightly_pipeline import run_full_nightly_pipeline
-from csf_recommendation_engine.jobs.rec_refresh_pipeline import run_rec_refresh_pipeline
+# from csf_recommendation_engine.jobs.rec_refresh_pipeline import run_rec_refresh_pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -98,19 +98,20 @@ async def lifespan(app: FastAPI):
             max_instances=1,
             coalesce=True,
         )
-    if settings.rec_refresh_enabled:
+    # if settings.rec_refresh_enabled:
         
-        scheduler.add_job(
-            run_rec_refresh_pipeline,
-            IntervalTrigger(minutes=15),
-            id="csf-rec-refresh",
-            replace_existing=True,
-            max_instances=1,
-            coalesce=True,
-            next_run_time=datetime.now(ZoneInfo(settings.nightly_schedule_timezone)),
-        )
+    #     scheduler.add_job(
+    #         run_rec_refresh_pipeline,
+    #         IntervalTrigger(minutes=15),
+    #         id="csf-rec-refresh",
+    #         replace_existing=True,
+    #         max_instances=1,
+    #         coalesce=True,
+    #         next_run_time=datetime.now(ZoneInfo(settings.nightly_schedule_timezone)),
+    #     )
 
-    if settings.nightly_pipeline_enabled or settings.rec_refresh_enabled:
+    # if settings.nightly_pipeline_enabled or settings.rec_refresh_enabled:
+    if settings.nightly_pipeline_enabled:
         scheduler.start()
         logger.info(
             "Scheduler started",

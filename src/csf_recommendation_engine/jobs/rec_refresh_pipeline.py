@@ -1,3 +1,12 @@
+"""Rec Refresh Pipeline
+
+Built as a cron job to refresh recommendations. 
+
+!! Deprecated for now, in favor of on-demand refresh via API endpoint, 
+which triggers a different workflow of "IOI processing". 
+Will revisit scheduled vs on-demand approach after gathering feedback.
+"""
+
 from __future__ import annotations
 
 import asyncio

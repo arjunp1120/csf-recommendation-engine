@@ -1,3 +1,15 @@
+"""Nightly heuristics build job for CSF Recommendation Engine.
+
+Heuristics artifacts are used for filtering+reranking - AFTER LightFM output.
+
+Aka, these are not features used by LightFM, but rather features used to adjust 
+the final output of the recommendation engine based on recent activity and other factors.
+
+Used via domain/reranking.py
+
+ALSO used by Intelligence Layer for context, in domain/intelligence_layer.py
+"""
+
 from __future__ import annotations
 
 import asyncio

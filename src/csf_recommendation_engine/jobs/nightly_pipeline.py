@@ -1,3 +1,9 @@
+"""Nightly pipeline manager
+
+Currently: builds and reloads heuristics artifacts (neightly_heuristics.py)
+TODO: extraction for shadow model (nightly_shadow_model.py)
+"""
+
 from __future__ import annotations
 
 import asyncio

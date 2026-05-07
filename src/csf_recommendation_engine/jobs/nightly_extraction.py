@@ -1,3 +1,9 @@
+"""Nightly extraction job for CSF recommendation engine.
+
+Specifically for shadow LightFM model training.
+Currently not implemented.
+"""
+
 import asyncio
 from datetime import datetime, timezone
 import logging

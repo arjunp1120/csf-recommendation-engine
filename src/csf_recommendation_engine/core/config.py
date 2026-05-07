@@ -62,7 +62,7 @@ class Settings(BaseSettings):
     nightly_batch_size: int = Field(default=25, alias="NIGHTLY_BATCH_SIZE")
     nightly_max_concurrency: int = Field(default=2, alias="NIGHTLY_MAX_CONCURRENCY")
     cross_match_threshold: float = Field(default=0.6, alias="CROSS_MATCH_THRESHOLD")
-    rec_refresh_enabled: bool = Field(default=True, alias="REC_REFRESH_ENABLED")
+    rec_refresh_enabled: bool = Field(default=False, alias="REC_REFRESH_ENABLED")
 
     # LLM / DAF SDK settings
     daf_base_url: str = Field(default="https://daf-sdk-backend.azurewebsites.net", alias="DAF_BASE_URL")

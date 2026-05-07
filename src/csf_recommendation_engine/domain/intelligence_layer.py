@@ -42,8 +42,8 @@ You will then be provided with a ranked list of potential counterparties, along 
 
 EVALUATION RULES:
 1. Size Fit: Compare the proposed trade `quantity` against the counterparty's `size_profile`. Counterparties where the requested quantity is near their historical mean or within their standard deviation are highly preferred.
-2. Time Fit: Look at the `current_trade_hour`. Check the counterparty's `hourly_ratios` for that specific index. Counterparties with high historical volume during the current hour are preferred.
-3. Baseline Score: Use the `score` as a strong guiding signal, but override it if the raw size/time data suggests a better intuitive fit.
+2. Time Fit: Look at the `current_trade_hour`. Check the counterparty's `hourly_ratios` for that specific index. Counterparties with high historical volume during the current AND future hours are preferred.
+3. Baseline Score: Use the `score` as a weak guiding signal, but override it if other data suggests a better intuitive fit.
 
 Your goal is to recommend the top 3 counterparties ranked from best (1) to worst (3) fit.
 The response MUST be a valid JSON object with the following structure:
