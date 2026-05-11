@@ -67,6 +67,8 @@ class Settings(BaseSettings):
     # LLM / DAF SDK settings
     daf_base_url: str = Field(default="https://daf-sdk-backend.azurewebsites.net", alias="DAF_BASE_URL")
     daf_api_key: str = Field(default="", alias="DAF_API_KEY")
+    daf_agent_direct_api_key: str = Field(default="", alias="DAF_AGENT_DIRECT_API_KEY")
+    recommendation_agent_id: str = Field(default="", alias="RECOMMENDATION_AGENT_ID")
     llm_api_key: str = Field(default="", alias="LLM_API_KEY")
     llm_model_name: str = Field(default="gpt-4o", alias="LLM_MODEL_NAME")
     llm_model_provider: str = Field(default="OpenAI", alias="LLM_MODEL_PROVIDER")
@@ -74,6 +76,63 @@ class Settings(BaseSettings):
     llm_max_tokens: int = Field(default=4096, alias="LLM_MAX_TOKENS")
     llm_enabled: bool = Field(default=True, alias="LLM_ENABLED")
     llm_candidate_pool_size: int = Field(default=10, alias="LLM_CANDIDATE_POOL_SIZE")
+    llm_request_timeout_s: float = Field(default=60.0, alias="LLM_REQUEST_TIMEOUT_S")
+
+    # Externally configured swarm/agent IDs on the DAF platform.
+    # Empty default = swarm not yet configured; engine will skip (or raise) at call time.
+    daf_tagger_agent_id: str = Field(default="b78ee6e0-9cd8-40ea-98bc-77bf442f60e9", alias="DAF_TAGGER_AGENT_ID")
+    daf_profiler_swarm_id: str = Field(default="", alias="DAF_PROFILER_SWARM_ID")
+    daf_market_reader_swarm_id: str = Field(default="", alias="DAF_MARKET_READER_SWARM_ID")
+    daf_recommender_explainer_swarm_id: str = Field(default="", alias="DAF_RECOMMENDER_EXPLAINER_SWARM_ID")
+    daf_match_strategist_swarm_id: str = Field(default="", alias="DAF_MATCH_STRATEGIST_SWARM_ID")
+    daf_coverage_coach_swarm_id: str = Field(default="", alias="DAF_COVERAGE_COACH_SWARM_ID")
+
+    # Embedding provider settings: DEFERRED for v1 (pgvector unavailable on local DB; see plan §17).
+    # When enabled, add: EMBEDDING_PROVIDER, EMBEDDING_MODEL, EMBEDDING_DIMENSION.
+
+    # Critic / validator settings (plan §11.4)
+    critic_mode: str = Field(default="shadow", alias="CRITIC_MODE")  # 'shadow' | 'strict'
+    critic_promotion_violation_rate: float = Field(default=0.01, alias="CRITIC_PROMOTION_VIOLATION_RATE")
+    critic_promotion_window: int = Field(default=500, alias="CRITIC_PROMOTION_WINDOW")
+
+    # Voice inquiry / Match Universe Cache settings (plan §10, §17)
+    voice_inquiry_expiry_minutes: int = Field(default=240, alias="VOICE_INQUIRY_EXPIRY_MINUTES")
+    match_universe_rebuild_interval_seconds: int = Field(
+        default=300, alias="MATCH_UNIVERSE_REBUILD_INTERVAL_SECONDS"
+    )
+    match_qty_overlap_ratio: float = Field(default=0.5, alias="MATCH_QTY_OVERLAP_RATIO")
+    match_price_tolerance_bps: float = Field(default=25.0, alias="MATCH_PRICE_TOLERANCE_BPS")
+    match_price_tolerance_indication_bps: float = Field(
+        default=50.0, alias="MATCH_PRICE_TOLERANCE_INDICATION_BPS"
+    )
+
+    # Match dedup windows (plan §10.2)
+    match_dedup_window_hours: int = Field(default=24, alias="MATCH_DEDUP_WINDOW_HOURS")
+    match_feedback_dedup_window_hours: int = Field(
+        default=168, alias="MATCH_FEEDBACK_DEDUP_WINDOW_HOURS"
+    )
+
+    # IOI back-stop polling job (plan §13.2, Step 4.6)
+    ioi_processing_polling_interval_seconds_market: int = Field(
+        default=120, alias="IOI_PROCESSING_POLLING_INTERVAL_SECONDS_MARKET"
+    )
+    ioi_processing_polling_interval_seconds_off_hours: int = Field(
+        default=1800, alias="IOI_PROCESSING_POLLING_INTERVAL_SECONDS_OFF_HOURS"
+    )
+    ioi_processing_grace_seconds: int = Field(default=30, alias="IOI_PROCESSING_GRACE_SECONDS")
+    ioi_processing_max_attempts: int = Field(default=3, alias="IOI_PROCESSING_MAX_ATTEMPTS")
+
+    # Dossier "hot" thresholds (plan §17)
+    dossier_hot_trade_hours: int = Field(default=24, alias="DOSSIER_HOT_TRADE_HOURS")
+    dossier_hot_inquiry_hours: int = Field(default=4, alias="DOSSIER_HOT_INQUIRY_HOURS")
+
+    # Correlative-attribution job (plan §14.5)
+    correlative_attribution_window_hours: int = Field(
+        default=24, alias="CORRELATIVE_ATTRIBUTION_WINDOW_HOURS"
+    )
+
+    # Reranker: flow polarity penalty weight (plan Step 1.8). Default 0 = disabled.
+    rerank_weight_flow_polarity: float = Field(default=0.0, alias="RERANK_WEIGHT_FLOW_POLARITY")
 
     # top_k: int = Field(default=5, alias="TOP_K")
     # max_candidates: int = Field(default=5000, alias="MAX_CANDIDATES")

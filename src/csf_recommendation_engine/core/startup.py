@@ -39,15 +39,21 @@ async def preload_client_entity_catalog() -> None:
 async def preload_intelligence_service() -> None:
     """Instantiate the LLM intelligence service and store it in app state.
 
-    Only runs if ``LLM_ENABLED`` is ``True``.  No DAF agent is created
-    here -- agents are ephemeral and created per-evaluation call.
+    Only runs if ``LLM_ENABLED`` is ``True``. The rebuilt
+    ``IntelligenceService`` (plan Step 0.6) is an async HTTP client that
+    holds a single ``httpx.AsyncClient`` shared across all swarm calls;
+    instantiate once at startup, close via ``aclose()`` on shutdown.
+    Agents/swarms themselves are configured externally on the DAF
+    platform and addressed by id (see ``DAF_*_SWARM_ID`` settings).
     """
     settings = get_settings()
     if not settings.llm_enabled:
         logger.info("LLM intelligence layer disabled via config")
         return
 
-    from csf_recommendation_engine.domain.intelligence_layer import IntelligenceService
+    from csf_recommendation_engine.domain.intelligence.intelligence_service import (
+        IntelligenceService,
+    )
 
     service = IntelligenceService(settings)
     await app_state.set("intelligence_service", service)

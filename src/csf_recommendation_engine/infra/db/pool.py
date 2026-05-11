@@ -13,16 +13,19 @@ def get_db_pool() -> asyncpg.Pool:
         raise RuntimeError("Database pool is not initialized.")
     return db_pool
 
-async def init_db_pool(dsn: str) -> None:
+async def init_db_pool(dsn: str, require_ssl = True) -> None:
     logger.info("Initializing database connection pool...")
     global db_pool
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
+    if require_ssl:
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
     
-    db_pool = await asyncpg.create_pool(
-        dsn=dsn, min_size=1, max_size=5, ssl=ssl_context
-    )
+        db_pool = await asyncpg.create_pool(
+            dsn=dsn, min_size=1, max_size=5, ssl=ssl_context
+        )
+    else:
+        db_pool = await asyncpg.create_pool(dsn=dsn, min_size=1, max_size=5)
     logger.info("Database connection pool initialized.")
 
 async def close_db_pool() -> None:
