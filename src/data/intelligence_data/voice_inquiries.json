@@ -1,0 +1,262 @@
+[
+  {
+    "inquiry_id": "vi-001",
+    "entity_id": "07725f01-9f8c-4d18-89a0-ffaf572a61a4",
+    "ioi_text": "Working to sell 80 lots HO Aug26 at 2.32, indication only",
+    "tags": {
+      "side": "Sell",
+      "product": "Heating Oil",
+      "instrument_name": "HO Aug26",
+      "qty": 80,
+      "tenor": "Aug26",
+      "price": 2.32,
+      "qualifier": "at",
+      "urgency": "Low",
+      "sentiment": "Bearish",
+      "structure": "Flat Price",
+      "desk": "Distillates",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-08T10:15:00"
+  },
+  {
+    "inquiry_id": "vi-002",
+    "entity_id": "25084f26-99fa-4f6c-92e6-9f99b9a2c0aa",
+    "ioi_text": "Buyer of 120 lots CL Aug26 at 71.40, working order",
+    "tags": {
+      "side": "Buy",
+      "product": "WTI",
+      "instrument_name": "CL Aug26",
+      "qty": 120,
+      "tenor": "Aug26",
+      "price": 71.4,
+      "qualifier": "at",
+      "urgency": "Med",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Crude",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-08T11:02:00"
+  },
+  {
+    "inquiry_id": "vi-003",
+    "entity_id": "727a24cc-3b88-4c5b-9a4f-1b9c98c5c4d1",
+    "ioi_text": "Looking to sell 200 lots CL Jul26 around 71.10, better levels welcome",
+    "tags": {
+      "side": "Sell",
+      "product": "WTI",
+      "instrument_name": "CL Jul26",
+      "qty": 200,
+      "tenor": "Jul26",
+      "price": 71.1,
+      "qualifier": "better",
+      "urgency": "Med",
+      "sentiment": "Bearish",
+      "structure": "Flat Price",
+      "desk": "Crude",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-08T12:45:00"
+  },
+  {
+    "inquiry_id": "vi-004",
+    "entity_id": "95f573a6-8b21-4ad7-8a18-78a3a3ce62fc",
+    "ioi_text": "Big buyer of CL Dec26, looking for 300 lots near 72.00",
+    "tags": {
+      "side": "Buy",
+      "product": "WTI",
+      "instrument_name": "CL Dec26",
+      "qty": 300,
+      "tenor": "Dec26",
+      "price": 72.0,
+      "qualifier": "at",
+      "urgency": "High",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Crude",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-09T08:30:00"
+  },
+  {
+    "inquiry_id": "vi-005",
+    "entity_id": "64be2bb8-5acd-4f88-8d8b-9ebab234cd91",
+    "ioi_text": "Sell 150 HO Jul26 at 2.28, urgent",
+    "tags": {
+      "side": "Sell",
+      "product": "Heating Oil",
+      "instrument_name": "HO Jul26",
+      "qty": 150,
+      "tenor": "Jul26",
+      "price": 2.28,
+      "qualifier": "at",
+      "urgency": "High",
+      "sentiment": "Bearish",
+      "structure": "Flat Price",
+      "desk": "Distillates",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-09T09:14:00"
+  },
+  {
+    "inquiry_id": "vi-006",
+    "entity_id": "7a2441ab-12f7-4b6c-9a8d-7b29b71ad5d2",
+    "ioi_text": "Need to buy 90 lots RB Aug26 at 2.18 or better",
+    "tags": {
+      "side": "Buy",
+      "product": "RBOB",
+      "instrument_name": "RB Aug26",
+      "qty": 90,
+      "tenor": "Aug26",
+      "price": 2.18,
+      "qualifier": "better",
+      "urgency": "Med",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Refined",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-09T09:55:00"
+  },
+  {
+    "inquiry_id": "vi-007",
+    "entity_id": "41bf99b3-2c8b-4f97-8d3f-83f9eeb1f0a3",
+    "ioi_text": "Selling 60 lots Nat Gas Feb 26 at 3.45, working",
+    "tags": {
+      "side": "Sell",
+      "product": "Natural Gas",
+      "instrument_name": "Nat Gas Feb 26",
+      "qty": 60,
+      "tenor": "Feb26",
+      "price": 3.45,
+      "qualifier": "at",
+      "urgency": "Med",
+      "sentiment": "Neutral",
+      "structure": "Flat Price",
+      "desk": "Nat Gas",
+      "venue": "ICE"
+    },
+    "created_at": "2026-05-09T10:30:00"
+  },
+  {
+    "inquiry_id": "vi-008",
+    "entity_id": "eae7e2b7-9e2a-4d12-bbf1-5a8c44b18a08",
+    "ioi_text": "Bidding 250 lots CL Dec26 at 71.85, ready to work",
+    "tags": {
+      "side": "Buy",
+      "product": "WTI",
+      "instrument_name": "CL Dec26",
+      "qty": 250,
+      "tenor": "Dec26",
+      "price": 71.85,
+      "qualifier": "at",
+      "urgency": "Med",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Crude",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-09T11:00:00"
+  },
+  {
+    "inquiry_id": "vi-009",
+    "entity_id": "1232733a-c35b-4e0b-8471-e0f75cf67ce4",
+    "ioi_text": "Looking to sell 70 HO Jun26 at 2.35",
+    "tags": {
+      "side": "Sell",
+      "product": "Heating Oil",
+      "instrument_name": "HO Jun26",
+      "qty": 70,
+      "tenor": "Jun26",
+      "price": 2.35,
+      "qualifier": "at",
+      "urgency": "Low",
+      "sentiment": "Bearish",
+      "structure": "Flat Price",
+      "desk": "Distillates",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-09T11:30:00"
+  },
+  {
+    "inquiry_id": "vi-010",
+    "entity_id": "56731d0d-7ac9-4f23-9b6d-25a4cd28b011",
+    "ioi_text": "Bid for 120 HO Aug26 around 2.30, indication",
+    "tags": {
+      "side": "Buy",
+      "product": "Heating Oil",
+      "instrument_name": "HO Aug26",
+      "qty": 120,
+      "tenor": "Aug26",
+      "price": 2.3,
+      "qualifier": "at",
+      "urgency": "Low",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Distillates",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-09T12:00:00"
+  },
+  {
+    "inquiry_id": "vi-011",
+    "entity_id": "259bc6ac-1f77-4ba8-afb8-d42e481c9aaf",
+    "ioi_text": "Buyer of 150 lots CL Apr26 on CME, working late morning New York",
+    "tags": {
+      "side": "Buy",
+      "product": "WTI",
+      "instrument_name": "CL Aug26",
+      "qty": 150,
+      "tenor": "Aug26",
+      "price": 72.05,
+      "qualifier": "at",
+      "urgency": "Med",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Crude",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-10T09:20:00"
+  },
+  {
+    "inquiry_id": "vi-012",
+    "entity_id": "2571cbed-0857-4fd6-8bee-0b16bbd9aa0e",
+    "ioi_text": "Selling 100 lots CL Sep26 on CME during early Asia hours, looking for better",
+    "tags": {
+      "side": "Sell",
+      "product": "WTI",
+      "instrument_name": "CL Sep26",
+      "qty": 100,
+      "tenor": "Sep26",
+      "price": 71.6,
+      "qualifier": "better",
+      "urgency": "Low",
+      "sentiment": "Bearish",
+      "structure": "Flat Price",
+      "desk": "Crude",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-10T10:05:00"
+  },
+  {
+    "inquiry_id": "vi-013",
+    "entity_id": "25084f26-1e8c-4894-ab65-ceae78798199",
+    "ioi_text": "Need to buy 80 lots HO Dec26 on CME in the New York afternoon, indication only",
+    "tags": {
+      "side": "Buy",
+      "product": "Heating Oil",
+      "instrument_name": "HO Dec26",
+      "qty": 80,
+      "tenor": "Dec26",
+      "price": 2.44,
+      "qualifier": "at",
+      "urgency": "Low",
+      "sentiment": "Bullish",
+      "structure": "Flat Price",
+      "desk": "Distillates",
+      "venue": "CME"
+    },
+    "created_at": "2026-05-10T11:45:00"
+  }
+]

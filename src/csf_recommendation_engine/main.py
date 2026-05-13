@@ -11,7 +11,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from csf_recommendation_engine.api.middleware.request_id import RequestIdMiddleware
-from csf_recommendation_engine.api.routes import admin, health, internal, recommend
+from csf_recommendation_engine.api.routes import admin, health, internal, recommend, voice_inquiry
 from csf_recommendation_engine.core.config import get_settings
 from csf_recommendation_engine.core.logging import configure_logging
 
@@ -143,6 +143,7 @@ def create_app() -> FastAPI:
     app.include_router(recommend.router)
     app.include_router(internal.router)
     app.include_router(admin.router)
+    app.include_router(voice_inquiry.router)
     return app
 
 

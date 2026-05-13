@@ -75,6 +75,19 @@ class Settings(BaseSettings):
     llm_enabled: bool = Field(default=True, alias="LLM_ENABLED")
     llm_candidate_pool_size: int = Field(default=10, alias="LLM_CANDIDATE_POOL_SIZE")
 
+    # Voice-inquiry demo settings (local-disk, no DB writes)
+    daf_recommender_agent_id: str = Field(default="", alias="DAF_RECOMMENDER_AGENT_ID")
+    daf_tagger_agent_id: str = Field(default="", alias="DAF_TAGGER_AGENT_ID")
+    daf_dossier_agent_id: str = Field(default="", alias="DAF_DOSSIER_AGENT_ID")
+    daf_matcher_agent_id: str = Field(default="", alias="DAF_MATCHER_AGENT_ID")
+    voice_inquiries_path: str = Field(
+        default="src/data/intelligence_data/voice_inquiries.json", alias="VOICE_INQUIRIES_PATH"
+    )
+    voice_inquiry_dossiers_path: str = Field(
+        default="src/data/intelligence_data/voice_inquiry_dossiers.json", alias="VOICE_INQUIRY_DOSSIERS_PATH"
+    )
+    voice_inquiry_top_k: int = Field(default=3, alias="VOICE_INQUIRY_TOP_K")
+
     # top_k: int = Field(default=5, alias="TOP_K")
     # max_candidates: int = Field(default=5000, alias="MAX_CANDIDATES")
     # recommend_timeout_seconds: float = Field(default=1.5, alias="RECOMMEND_TIMEOUT_SECONDS")
