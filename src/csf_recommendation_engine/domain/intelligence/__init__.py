@@ -37,6 +37,7 @@ from csf_recommendation_engine.domain.intelligence.packet import (
 )
 from csf_recommendation_engine.domain.intelligence.responses import (
     CoverageCoachResponse,
+    InstrumentResolutionResponse,
     MarketReaderResponse,
     MatchStrategistResponse,
     ProfilerResponse,
@@ -77,6 +78,7 @@ __all__ = [
     "RequestContext",
     # responses.py
     "CoverageCoachResponse",
+    "InstrumentResolutionResponse",
     "MarketReaderResponse",
     "MatchStrategistResponse",
     "ProfilerResponse",

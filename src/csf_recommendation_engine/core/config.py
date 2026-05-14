@@ -86,6 +86,11 @@ class Settings(BaseSettings):
     daf_recommender_explainer_swarm_id: str = Field(default="", alias="DAF_RECOMMENDER_EXPLAINER_SWARM_ID")
     daf_match_strategist_swarm_id: str = Field(default="", alias="DAF_MATCH_STRATEGIST_SWARM_ID")
     daf_coverage_coach_swarm_id: str = Field(default="", alias="DAF_COVERAGE_COACH_SWARM_ID")
+    # Agent (not swarm) used by scripts/seed_instrument_products.py to resolve
+    # long-tail trade_history.instrument_name -> canonical product (plan Step 0.10).
+    daf_instrument_resolver_agent_id: str = Field(
+        default="", alias="DAF_INSTRUMENT_RESOLVER_AGENT_ID"
+    )
 
     # Embedding provider settings: DEFERRED for v1 (pgvector unavailable on local DB; see plan §17).
     # When enabled, add: EMBEDDING_PROVIDER, EMBEDDING_MODEL, EMBEDDING_DIMENSION.

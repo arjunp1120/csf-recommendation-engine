@@ -36,6 +36,26 @@ async def preload_client_entity_catalog() -> None:
     logger.info("Preloaded client entity catalog into memory")
 
 
+async def preload_product_resolver() -> None:
+    """Load the ``instrument_products`` table into an in-memory
+    :class:`ProductResolver` and stash it under
+    ``app_state.get('product_resolver')`` (plan Step 0.9).
+
+    Safe to call before the table has been seeded — the resolver simply
+    resolves nothing until the table is populated by Step 0.10.
+    """
+    from csf_recommendation_engine.domain.products import ProductResolver
+
+    pool = get_db_pool()
+    async with pool.acquire() as conn:
+        resolver = await ProductResolver.load(conn)
+    await app_state.set("product_resolver", resolver)
+    logger.info(
+        "ProductResolver preloaded",
+        extra=resolver.size,
+    )
+
+
 async def preload_intelligence_service() -> None:
     """Instantiate the LLM intelligence service and store it in app state.
 

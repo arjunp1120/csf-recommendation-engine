@@ -164,3 +164,50 @@ class CoverageCoachResponse(BaseModel):
         default=None,
         description="One of 'voice' | 'email' | 'chat' | None.",
     )
+
+
+# ---------------------------------------------------------------------------
+# Instrument Resolver (single agent, not a swarm — used by Step 0.10 seeding)
+# ---------------------------------------------------------------------------
+
+
+class InstrumentResolutionResponse(BaseModel):
+    """Output of the Instrument Product Resolver agent (plan Step 0.10).
+
+    Maps one free-text ``trade_history.instrument_name`` (plus optional
+    CME-style ``symbol``) to the canonical product / structure / front
+    contract month. Fields mirror ``instrument_products`` columns one-to-one;
+    ``expiry_date`` is always returned as null per the agent's system
+    instructions (out-of-scope for v1).
+    """
+
+    model_config = _BASE_MODEL_CONFIG
+
+    product_name: str | None = Field(
+        default=None,
+        description="One of the canonical product names, or null when unresolvable.",
+    )
+    product_family: str | None = Field(
+        default=None,
+        description="Crude / Distillates / Refined / Nat Gas, or null.",
+    )
+    structure_type: str | None = Field(
+        default=None,
+        description="Outright | Spread | Butterfly | Crack | Swap | Strip | Unknown",
+    )
+    contract_month: str | None = Field(
+        default=None,
+        description="YYYY-MM front-leg month; null for strips / month-less names.",
+    )
+    expiry_date: str | None = Field(
+        default=None,
+        description="Always null in v1 — exact CME expiry rules are out of scope.",
+    )
+    confidence: float = Field(
+        ...,
+        description="0.0-1.0 confidence; values <0.3 mean the agent declined to guess.",
+    )
+    reasoning: str = Field(
+        default="",
+        description="One to three short sentences citing the substring(s) of the input.",
+    )

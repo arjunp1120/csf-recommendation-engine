@@ -46,6 +46,9 @@ M_SWARM_CALL_MARKET_READER = "intelligence.swarm.call.market_reader"
 M_SWARM_CALL_RECOMMENDER_EXPLAINER = "intelligence.swarm.call.recommender_explainer"
 M_SWARM_CALL_MATCH_STRATEGIST = "intelligence.swarm.call.match_strategist"
 M_SWARM_CALL_COVERAGE_COACH = "intelligence.swarm.call.coverage_coach"
+# Instrument Resolver is a single agent (not a swarm) but groups here for
+# uniform-metric-naming. Used by scripts/seed_instrument_products.py (Step 0.10).
+M_SWARM_CALL_INSTRUMENT_RESOLVER = "intelligence.swarm.call.instrument_resolver"
 
 # Swarm-call latency (per swarm)
 M_SWARM_LATENCY_TAGGER = "intelligence.swarm.latency.tagger"
@@ -54,6 +57,7 @@ M_SWARM_LATENCY_MARKET_READER = "intelligence.swarm.latency.market_reader"
 M_SWARM_LATENCY_RECOMMENDER_EXPLAINER = "intelligence.swarm.latency.recommender_explainer"
 M_SWARM_LATENCY_MATCH_STRATEGIST = "intelligence.swarm.latency.match_strategist"
 M_SWARM_LATENCY_COVERAGE_COACH = "intelligence.swarm.latency.coverage_coach"
+M_SWARM_LATENCY_INSTRUMENT_RESOLVER = "intelligence.swarm.latency.instrument_resolver"
 
 # Validator outcomes (plan §11.4)
 M_VALIDATOR_RUN = "intelligence.validator.run"

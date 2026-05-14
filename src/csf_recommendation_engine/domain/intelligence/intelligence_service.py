@@ -43,12 +43,14 @@ from pydantic import ValidationError
 from csf_recommendation_engine.core.config import Settings
 from csf_recommendation_engine.core.observability import (
     M_SWARM_CALL_COVERAGE_COACH,
+    M_SWARM_CALL_INSTRUMENT_RESOLVER,
     M_SWARM_CALL_MARKET_READER,
     M_SWARM_CALL_MATCH_STRATEGIST,
     M_SWARM_CALL_PROFILER,
     M_SWARM_CALL_RECOMMENDER_EXPLAINER,
     M_SWARM_CALL_TAGGER,
     M_SWARM_LATENCY_COVERAGE_COACH,
+    M_SWARM_LATENCY_INSTRUMENT_RESOLVER,
     M_SWARM_LATENCY_MARKET_READER,
     M_SWARM_LATENCY_MATCH_STRATEGIST,
     M_SWARM_LATENCY_PROFILER,
@@ -59,6 +61,7 @@ from csf_recommendation_engine.core.observability import (
 from csf_recommendation_engine.domain.intelligence.packet import IntelligencePacket
 from csf_recommendation_engine.domain.intelligence.responses import (
     CoverageCoachResponse,
+    InstrumentResolutionResponse,
     MarketReaderResponse,
     MatchStrategistResponse,
     ProfilerResponse,
@@ -327,6 +330,41 @@ class IntelligenceService:
         if parsed is None:
             return None
         return _validate_response_model(parsed, CoverageCoachResponse, "S6 Coverage Coach")
+
+    # ------------------------------------------------------------------
+    # Instrument Resolver (single agent — Step 0.10 seeding script)
+    # ------------------------------------------------------------------
+
+    async def resolve_instrument(
+        self, instrument_name: str, symbol: str | None = None
+    ) -> InstrumentResolutionResponse | None:
+        """Map one free-text ``instrument_name`` (and optional CME-style
+        ``symbol``) to a canonical product via the externally configured
+        Instrument Resolver agent (plan Step 0.10).
+
+        The user message is the JSON-encoded pair the agent's system
+        instructions expect — this keeps prompt shape under operator
+        control on the DAF side.
+        """
+        if not instrument_name or not instrument_name.strip():
+            return None
+
+        payload = {"instrument_name": instrument_name, "symbol": symbol}
+        message = json.dumps(payload, ensure_ascii=False)
+
+        parsed = await self._call_swarm(
+            target_id=self._settings.daf_instrument_resolver_agent_id,
+            swarm_label="Instrument Resolver",
+            message=message,
+            packet_hash=None,
+            metric_call=M_SWARM_CALL_INSTRUMENT_RESOLVER,
+            metric_latency=M_SWARM_LATENCY_INSTRUMENT_RESOLVER,
+        )
+        if parsed is None:
+            return None
+        return _validate_response_model(
+            parsed, InstrumentResolutionResponse, "Instrument Resolver"
+        )
 
 
 # ---------------------------------------------------------------------------

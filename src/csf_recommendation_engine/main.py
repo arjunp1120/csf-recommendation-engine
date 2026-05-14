@@ -21,6 +21,7 @@ from csf_recommendation_engine.core.startup import (
     preload_heuristics_state,
     preload_client_entity_catalog,
     preload_intelligence_service,
+    preload_product_resolver,
 )
 from csf_recommendation_engine.infra.db.pool import init_db_pool, close_db_pool
 from csf_recommendation_engine.jobs.nightly_pipeline import run_full_nightly_pipeline
@@ -81,6 +82,13 @@ async def lifespan(app: FastAPI):
         await preload_client_entity_catalog()
     except Exception:
         logger.exception("Failed to preload client entity catalog; candidate filtering may be incomplete")
+
+    try:
+        await preload_product_resolver()
+    except Exception:
+        logger.exception(
+            "Failed to preload product resolver; instrument_name->product lookups will return None until fixed"
+        )
 
     try:
         await preload_intelligence_service()
