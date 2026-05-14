@@ -18,3 +18,5 @@ terraform/
 .vscode/
 .idea/
 rep-del.json
+src/data/daf_sdk_installed/
+current-aca.json

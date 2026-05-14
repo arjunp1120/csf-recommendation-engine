@@ -15,9 +15,6 @@ RUN apt-get update \
 COPY pyproject.toml README.md ./
 COPY src ./src
 
-COPY .venv_wsl/lib/python3.11/site-packages/daf_sdk/ ./src/daf_sdk/
-
-
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install .
 

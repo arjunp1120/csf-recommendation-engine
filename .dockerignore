@@ -12,5 +12,4 @@ tests
 terraform
 sql
 .venv_wsl
-!.venv_wsl/lib/python3.11/site-packages/daf_sdk/
 .vscode
